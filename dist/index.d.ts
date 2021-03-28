@@ -6,12 +6,12 @@ import { Plugin } from 'vite';
  * @param dist Directory of `exec` output
  * @param target Directory to copy files from dist
  */
-interface WatcherOptions {
+interface Options {
     watch: string;
     exec: string;
     dist: string;
     target: string;
 }
-declare function watcherPlugin(options: WatcherOptions): Plugin;
+declare function watcherPlugin(options: Options): Plugin;
 
 export default watcherPlugin;

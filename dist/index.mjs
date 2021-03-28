@@ -1,9 +1,24 @@
 // src/index.ts
 import {watch} from "fs/promises";
+import {
+  closeSync,
+  existsSync,
+  openSync,
+  utimesSync
+} from "fs";
 import {exec} from "child_process";
 import {copy} from "fs-extra";
+function touch(path) {
+  const time = new Date();
+  try {
+    utimesSync(path, time, time);
+  } catch (err) {
+    closeSync(openSync(path, "w"));
+  }
+}
 function watcherPlugin(options) {
-  ;
+  let s;
+  let configFile = existsSync("vite.config.ts") ? "vite.config.ts" : "vite.config.js";
   (async () => {
     const watcher = watch(options.watch);
     let lock = false;
@@ -22,13 +37,18 @@ function watcherPlugin(options) {
             console.error(err.message);
           }
           lock = false;
+          touch(configFile);
           console.log("Watching...");
         });
-      }, 100);
+      }, 500);
     }
   })();
   return {
-    name: "vite-plugin-watcher"
+    name: "vite-plugin-watcher",
+    apply: "serve",
+    configureServer(server) {
+      s = server;
+    }
   };
 }
 export {
