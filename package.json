@@ -1,5 +1,5 @@
 {
-  "name": "vite-plugin-watcher",
+  "name": "vite-plugin-linker",
   "version": "0.1.0",
   "description": "Watch, run, copy",
   "main": "dist/index.js",
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SubZtep/vite-plugin-watcher.git"
+    "url": "git+https://github.com/SubZtep/vite-plugin-linker.git"
   },
   "keywords": [
     "vite-plugin"
@@ -22,9 +22,9 @@
   "author": "Andras Serfozo <subztep@gmail.com>",
   "license": "Unlicense",
   "bugs": {
-    "url": "https://github.com/SubZtep/vite-plugin-watcher/issues"
+    "url": "https://github.com/SubZtep/vite-plugin-linker/issues"
   },
-  "homepage": "https://github.com/SubZtep/vite-plugin-watcher#readme",
+  "homepage": "https://github.com/SubZtep/vite-plugin-linker#readme",
   "dependencies": {
     "fs-extra": "^9.1.0"
   },
