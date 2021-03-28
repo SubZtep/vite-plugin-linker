@@ -1,0 +1,33 @@
+{
+  "name": "vite-plugin-watcher",
+  "version": "0.1.0",
+  "description": "Watch, run, copy",
+  "main": "index.js",
+  "scripts": {
+    "buildw": "tsc",
+    "build": "esbuild index.ts --bundle --platform=node > index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SubZtep/vite-plugin-watcher.git"
+  },
+  "keywords": [
+    "vite",
+    "plugin",
+    "watcher"
+  ],
+  "author": "Andras Serfozo <subztep@gmail.com>",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/SubZtep/vite-plugin-watcher/issues"
+  },
+  "homepage": "https://github.com/SubZtep/vite-plugin-watcher#readme",
+  "devDependencies": {
+    "esbuild": "^0.10.2",
+    "fs-extra": "^9.1.0"
+  },
+  "peerDependencies": {
+    "vite": "~2"
+  }
+}
