@@ -1,4 +1,5 @@
-import type { Plugin } from "vite";
+import { Plugin } from 'vite';
+
 /**
  * @param watch Directory to watch for changes to run command.
  * @param exec Bash command to run after changes (eg: build)
@@ -11,5 +12,6 @@ interface WatcherOptions {
     dist: string;
     target: string;
 }
-export default function watcherPlugin(options: WatcherOptions): Plugin;
-export {};
+declare function watcherPlugin(options: WatcherOptions): Plugin;
+
+export default watcherPlugin;

@@ -18,9 +18,8 @@ interface WatcherOptions {
 }
 
 export default function watcherPlugin(options: WatcherOptions): Plugin {
-  const watcher = watch(options.watch)
-
   ;(async () => {
+    const watcher = watch(options.watch)
     let lock = false
     for await (const { eventType } of watcher) {
       if (lock || eventType !== "change") continue
