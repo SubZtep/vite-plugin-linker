@@ -1,6 +1,5 @@
 // @ts-ignore
 import { watch } from "fs/promises"
-// @ts-ignore
 import { exec } from "child_process"
 import { copy } from "fs-extra"
 import type { Plugin } from "vite"
@@ -18,29 +17,31 @@ interface WatcherOptions {
   target: string
 }
 
-export default async function watcherPlugin(options: WatcherOptions): Promise<Plugin> {
+export default function watcherPlugin(options: WatcherOptions): Plugin {
   const watcher = watch(options.watch)
 
-  let lock = false
-  for await (const { eventType } of watcher) {
-    if (lock || eventType !== "change") continue
+  ;(async () => {
+    let lock = false
+    for await (const { eventType } of watcher) {
+      if (lock || eventType !== "change") continue
 
-    console.log("Watched changed")
-    lock = true
-    setTimeout(() => {
-      console.log("Executing")
-      exec(options.exec, async () => {
-        console.log("Copying")
-        try {
-          await copy(options.dist, options.target, { overwrite: true })
-        } catch (err) {
-          console.error(err.message)
-        }
-        lock = false
-        console.log("Watching...")
-      })
-    }, 100)
-  }
+      console.log("Watched changed")
+      lock = true
+      setTimeout(() => {
+        console.log("Executing")
+        exec(options.exec, async () => {
+          console.log("Copying")
+          try {
+            await copy(options.dist, options.target, { overwrite: true })
+          } catch (err) {
+            console.error(err.message)
+          }
+          lock = false
+          console.log("Watching...")
+        })
+      }, 100)
+    }
+  })()
 
   return {
     name: "vite-plugin-watcher",

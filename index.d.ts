@@ -11,5 +11,5 @@ interface WatcherOptions {
     dist: string;
     target: string;
 }
-export default function watcherPlugin(options: WatcherOptions): Promise<Plugin>;
+export default function watcherPlugin(options: WatcherOptions): Plugin;
 export {};
