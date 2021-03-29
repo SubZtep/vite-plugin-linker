@@ -1,15 +1,21 @@
 import { Plugin } from 'vite';
 
-/**
- * @param watch Directory to watch for changes to run command.
- * @param exec Bash command to run after changes (eg: build).
- * @param dist Directory of `exec` output.
- * @param target Directory to copy files from `dist`.
- */
 interface Options {
-    watch: string;
+    /**
+     * File, directory or glob to watch for changes to run command.
+     */
+    watch: string | string[];
+    /**
+     * Bash command to run after changes (eg: build).
+     */
     exec: string;
+    /**
+     * Directory of `exec` output.
+     */
     dist: string;
+    /**
+     * Directory to copy files from `dist`.
+     */
     target: string;
 }
 declare function watcherPlugin(options: Options): Plugin;
