@@ -1,33 +1,27 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true});// src/index.ts
-var _promises = require('fs/promises');
-
-
-
-
-
-var _fs = require('fs');
+"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/index.ts
+var _fs = require('fs'); var _fs2 = _interopRequireDefault(_fs);
 var _path = require('path');
 var _child_process = require('child_process');
 var _fsextra = require('fs-extra');
 function touch(path) {
   const time = new Date();
   try {
-    _fs.utimesSync.call(void 0, path, time, time);
+    _fs2.default.utimesSync(path, time, time);
   } catch (err) {
-    _fs.closeSync.call(void 0, _fs.openSync.call(void 0, path, "w"));
+    _fs2.default.closeSync(_fs2.default.openSync(path, "w"));
   }
 }
 function watcherPlugin(options) {
-  const configFile = _fs.existsSync.call(void 0, "vite.config.ts") ? "vite.config.ts" : "vite.config.js";
+  const configFile = _fs2.default.existsSync("vite.config.ts") ? "vite.config.ts" : "vite.config.js";
   const targetResolved = _path.resolve.call(void 0, options.target);
   (async () => {
-    const watcher = _promises.watch.call(void 0, options.watch);
     let lock = false;
-    for await (const {eventType} of watcher) {
-      if (lock || eventType !== "change")
-        continue;
-      console.log("Watched changed");
+    const watcher = _fs2.default.watch(options.watch, () => {
+      if (lock)
+        return;
       lock = true;
+      watcher.close();
+      console.log("Watched changed");
       setTimeout(() => {
         console.log("Executing");
         _child_process.exec.call(void 0, options.exec, async () => {
@@ -45,10 +39,9 @@ function watcherPlugin(options) {
           });
           touch(configFile);
           lock = false;
-          console.log("Watching...");
         });
       }, 500);
-    }
+    });
   })();
   return {
     name: "vite-plugin-watcher",

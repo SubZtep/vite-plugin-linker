@@ -1,6 +1,6 @@
 # vite-plugin-linker
 
-On **win32** environment **npm link** has some issues due the lack of file system link. This plugin resolves this issue and restart _Vite_ server after module update for smooth development.
+On **win32** environment [**npm link**](https://docs.npmjs.com/cli/v7/commands/npm-link) has some issues due the lack of file system link. This plugin resolves this issue and restart _Vite_ server after module update for smooth development.
 
 ## Install
 
@@ -54,6 +54,10 @@ export default defineConfig({
 ### Why does this plugin run the build command?
 
 One terminal window is enough to run the server and builds.
+
+### Why wait for a timeout after watch changes?
+
+Sometimes `watch` triggers multiple change events (especially on win32).
 
 ## License
 

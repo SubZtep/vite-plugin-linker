@@ -1,10 +1,8 @@
-// @ts-ignore
-import { watch } from "fs/promises"
-import * as fs from "fs"
+import type { Plugin } from "vite"
+import fs from "fs"
 import { resolve } from "path"
 import { exec } from "child_process"
 import { copy } from "fs-extra"
-import type { Plugin } from "vite"
 
 function touch(path: string) {
   const time = new Date()
@@ -34,13 +32,14 @@ export default function watcherPlugin(options: Options): Plugin {
   const targetResolved = resolve(options.target)
 
   ;(async () => {
-    const watcher = watch(options.watch)
     let lock = false
-    for await (const { eventType } of watcher) {
-      if (lock || eventType !== "change") continue
 
-      console.log("Watched changed")
+    const watcher = fs.watch(options.watch, () => {
+      if (lock) return
       lock = true
+      watcher.close()
+      console.log("Watched changed")
+
       setTimeout(() => {
         console.log("Executing")
         exec(options.exec, async () => {
@@ -62,10 +61,9 @@ export default function watcherPlugin(options: Options): Plugin {
           touch(configFile)
 
           lock = false
-          console.log("Watching...")
         })
       }, 500)
-    }
+    })
   })()
 
   return {
