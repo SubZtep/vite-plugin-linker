@@ -25,12 +25,12 @@ Example `vite.config.js` from the test project of `vite-plugin-pug`:
 ```js
 import { defineConfig } from "vite"
 import Pug from "vite-plugin-pug"
-import Watcher from "vite-plugin-watcher"
+import Linker from "vite-plugin-linker"
 
 export default defineConfig({
   plugins: [
     Pug(),
-    Watcher({
+    Linker({
       watch: "../vite-plugin-pug/src",
       exec: "cd ../vite-plugin-pug && npm run build",
       dist: "../vite-plugin-pug/dist",
