@@ -6,6 +6,7 @@ var _promises = require('fs/promises');
 
 
 var _fs = require('fs');
+var _path = require('path');
 var _child_process = require('child_process');
 var _fsextra = require('fs-extra');
 function touch(path) {
@@ -17,8 +18,8 @@ function touch(path) {
   }
 }
 function watcherPlugin(options) {
-  let s;
-  let configFile = _fs.existsSync.call(void 0, "vite.config.ts") ? "vite.config.ts" : "vite.config.js";
+  const configFile = _fs.existsSync.call(void 0, "vite.config.ts") ? "vite.config.ts" : "vite.config.js";
+  const targetResolved = _path.resolve.call(void 0, options.target);
   (async () => {
     const watcher = _promises.watch.call(void 0, options.watch);
     let lock = false;
@@ -36,8 +37,14 @@ function watcherPlugin(options) {
           } catch (err) {
             console.error(err.message);
           }
-          lock = false;
+          Object.keys(require.cache).forEach((id) => {
+            if (id.startsWith(targetResolved)) {
+              console.log("Clear cache", id);
+              delete require.cache[id];
+            }
+          });
           touch(configFile);
+          lock = false;
           console.log("Watching...");
         });
       }, 500);
@@ -45,10 +52,7 @@ function watcherPlugin(options) {
   })();
   return {
     name: "vite-plugin-watcher",
-    apply: "serve",
-    configureServer(server) {
-      s = server;
-    }
+    apply: "serve"
   };
 }
 

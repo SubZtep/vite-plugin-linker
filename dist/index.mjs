@@ -6,6 +6,7 @@ import {
   openSync,
   utimesSync
 } from "fs";
+import {resolve} from "path";
 import {exec} from "child_process";
 import {copy} from "fs-extra";
 function touch(path) {
@@ -17,8 +18,8 @@ function touch(path) {
   }
 }
 function watcherPlugin(options) {
-  let s;
-  let configFile = existsSync("vite.config.ts") ? "vite.config.ts" : "vite.config.js";
+  const configFile = existsSync("vite.config.ts") ? "vite.config.ts" : "vite.config.js";
+  const targetResolved = resolve(options.target);
   (async () => {
     const watcher = watch(options.watch);
     let lock = false;
@@ -36,8 +37,14 @@ function watcherPlugin(options) {
           } catch (err) {
             console.error(err.message);
           }
-          lock = false;
+          Object.keys(require.cache).forEach((id) => {
+            if (id.startsWith(targetResolved)) {
+              console.log("Clear cache", id);
+              delete require.cache[id];
+            }
+          });
           touch(configFile);
+          lock = false;
           console.log("Watching...");
         });
       }, 500);
@@ -45,10 +52,7 @@ function watcherPlugin(options) {
   })();
   return {
     name: "vite-plugin-watcher",
-    apply: "serve",
-    configureServer(server) {
-      s = server;
-    }
+    apply: "serve"
   };
 }
 export {

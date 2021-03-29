@@ -49,6 +49,12 @@ export default defineConfig({
 | dist   | Directory of `exec` output.                    |
 | target | Directory to copy files from `dist`.           |
 
+## FAQ
+
+### Why does this plugin run the build command?
+
+One terminal window is enough to run the server and builds.
+
 ## License
 
 [Unlicense](LICENSE)
